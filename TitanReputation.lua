@@ -21,9 +21,6 @@ TITANREP_bonusRepsTable = { [1375]=1, --Dominance Offensive
 			[1376]=1 --Operation: Shield Wall
 			}
 
-
-
-
 --check Glamour version
 --
 
