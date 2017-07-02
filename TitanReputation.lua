@@ -7,7 +7,8 @@ TITANREP_EventTime = GetTime()
 TITAMREP_InitTime = 0
 TITANREP_RTS = {}
 gFactionID = 1168
-TITANREP_bonusRepsTable = { [1375]=1, --Dominance Offensive 
+TITANREP_bonusRepsTable = { 
+            [1375]=1, --Dominance Offensive 
 			[1269]=1, --Golden Lotus
 			[1271]=1, --Order of the Cloud Serpent 
 			[1270]=1, --Shado-Pan 
@@ -175,6 +176,10 @@ function TitanPanelReputationButton_OnLoad(self)
 	}
     self:RegisterEvent("UPDATE_FACTION")
     self:RegisterEvent("ADDON_LOADED")
+
+    --Temporary Patch for Titan Panel RightClick bug.
+    TitanPanelBarButton_OnClick(Titan_Bar__Display_Bar,"RightButton")   
+    L_CloseDropDownMenus() 
 end
 
 -- event handling
@@ -516,7 +521,7 @@ function TitanPanelRightClickMenu_AddTitle2(title, level)
 		info.notClickable = 1
 		info.isTitle = 1
        		info.notCheckable = true
-		Lib_UIDropDownMenu_AddButton(info, level)
+		L_UIDropDownMenu_AddButton(info, level)
 	end
 end
 
@@ -533,12 +538,12 @@ function TitanPanelRightClickMenu_AddToggleVar2(text, id, var, toggleTable, leve
 	else
 		info.func = function()
 			TitanPanelRightClickMenu_ToggleVar({id, var, toggleTable})
-			Lib_CloseDropDownMenus()
+			L_CloseDropDownMenus()
 			end
 	end
 	info.checked = TitanGetVar(id, var)
 	info.keepShownOnClick = 1
-	Lib_UIDropDownMenu_AddButton(info, level)
+	L_UIDropDownMenu_AddButton(info, level)
 end
 
 function TitanPanelRightClickMenu_AddToggleIcon2(id)
@@ -549,7 +554,7 @@ function TitanPanelRightClickMenu_AddSpacer2(level)
 	local info = {}
 	info.disabled = 1
        	info.notCheckable = true
-	Lib_UIDropDownMenu_AddButton(info, level)
+	L_UIDropDownMenu_AddButton(info, level)
 end
 
 
@@ -565,9 +570,9 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 	info.checked = nil
 
 	-- level 2 menus
-	if ( LIB_UIDROPDOWNMENU_MENU_LEVEL == 3 ) then
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Friendship Rank Settings" then
-			TitanPanelRightClickMenu_AddTitle2(LIB_UIDROPDOWNMENU_MENU_VALUE, LIB_UIDROPDOWNMENU_MENU_LEVEL)
+	if ( L_UIDROPDOWNMENU_MENU_LEVEL == 3 ) then
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Friendship Rank Settings" then
+			TitanPanelRightClickMenu_AddTitle2(L_UIDROPDOWNMENU_MENU_VALUE, L_UIDROPDOWNMENU_MENU_LEVEL)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_FRIENDSHIPS, TITANREP_ID, "ShowFriendships","",3,true)
 			TitanPanelRightClickMenu_AddSpacer2(3)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_BESTFRIEND, TITANREP_ID, "ShowBESTFRIEND","",3,true)
@@ -577,8 +582,8 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_ACQUAINTANCE, TITANREP_ID, "ShowACQUAINTANCE","",3,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_STRANGER, TITANREP_ID, "ShowSTRANGER","",3,true)
 		end
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Reputation Standing Settings" then
-			TitanPanelRightClickMenu_AddTitle2(LIB_UIDROPDOWNMENU_MENU_VALUE, LIB_UIDROPDOWNMENU_MENU_LEVEL)
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Reputation Standing Settings" then
+			TitanPanelRightClickMenu_AddTitle2(L_UIDROPDOWNMENU_MENU_VALUE, L_UIDROPDOWNMENU_MENU_LEVEL)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_EXALTED, TITANREP_ID, "ShowExalted","",3,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_REVERED, TITANREP_ID, "ShowRevered","",3,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_HONORED, TITANREP_ID, "ShowHonored","",3,true)
@@ -588,8 +593,8 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_HOSTILE, TITANREP_ID, "ShowHostile","",3,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_HATED, TITANREP_ID, "ShowHated","",3,true)
 		end
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Tooltip Scale" then
-			TitanPanelRightClickMenu_AddTitle2("CAUTION: This effects ALL tooltips", LIB_UIDROPDOWNMENU_MENU_LEVEL)
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Tooltip Scale" then
+			TitanPanelRightClickMenu_AddTitle2("CAUTION: This effects ALL tooltips", L_UIDROPDOWNMENU_MENU_LEVEL)
 			info.text = TITANREP_SCALE_INCREASE
        			info.notCheckable = true
 			if TitanGetVar(TITANREP_ID, "ToolTipScale") >= 1.2 then
@@ -600,10 +605,10 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				info.func = function()
 					TitanSetVar(TITANREP_ID, "ToolTipScale", TitanGetVar(TITANREP_ID, "ToolTipScale") + .1)
 					TitanPanelButton_UpdateButton(TITANREP_ID)
-					Lib_CloseDropDownMenus()
+					L_CloseDropDownMenus()
 					end
 			end
-	     		Lib_UIDropDownMenu_AddButton(info, 3)
+	     		L_UIDropDownMenu_AddButton(info, 3)
 			info.text = TITANREP_SCALE_DECREASE
 			if TitanGetVar(TITANREP_ID, "ToolTipScale") <= .4 then
 				info.disabled = true
@@ -613,17 +618,17 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				info.func = function()
 					TitanSetVar(TITANREP_ID, "ToolTipScale", TitanGetVar(TITANREP_ID, "ToolTipScale") - .1)
 					TitanPanelButton_UpdateButton(TITANREP_ID)
-					Lib_CloseDropDownMenus()
+					L_CloseDropDownMenus()
 					end
 			end
-  			Lib_UIDropDownMenu_AddButton(info, 3)
+  			L_UIDropDownMenu_AddButton(info, 3)
 		end
 		return
 	end
-	if ( LIB_UIDROPDOWNMENU_MENU_LEVEL == 2 ) then
-		TitanPanelRightClickMenu_AddTitle2(LIB_UIDROPDOWNMENU_MENU_VALUE, LIB_UIDROPDOWNMENU_MENU_LEVEL)
+	if ( L_UIDROPDOWNMENU_MENU_LEVEL == 2 ) then
+		TitanPanelRightClickMenu_AddTitle2(L_UIDROPDOWNMENU_MENU_VALUE, L_UIDROPDOWNMENU_MENU_LEVEL)
 		TitanPanelReputation_GatherFactions(TitanPanelReputation_BuildFactionSubMenu)
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Button Options" then
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Button Options" then
 			info.text = TITANREP_DisplayOnRightSide
 			if TitanGetVar(TITANREP_ID, "DisplayOnRightSide") then
 				info.checked = 1
@@ -636,11 +641,11 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				else
 					TitanSetVar(TITANREP_ID, "DisplayOnRightSide", 1)
 				end
-				Lib_CloseDropDownMenus()
+				L_CloseDropDownMenus()
 				TitanPanel_InitPanelButtons()
 				end
-  			Lib_UIDropDownMenu_AddButton(info, 2)
-			TitanPanelRightClickMenu_AddToggleIcon2(TITANREP_ID, LIB_UIDROPDOWNMENU_MENU_LEVEL)
+  			L_UIDropDownMenu_AddButton(info, 2)
+			TitanPanelRightClickMenu_AddToggleIcon2(TITANREP_ID, L_UIDROPDOWNMENU_MENU_LEVEL)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_ShowFriendsOnBar, TITANREP_ID, "ShowFriendsOnBar","",2,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_FACTION_NAME_LABEL, TITANREP_ID, "ShowFactionName","",2,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_STANDING, TITANREP_ID, "ShowStanding","",2,true)
@@ -648,22 +653,22 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_VALUE, TITANREP_ID, "ShowValue","",2,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_PERCENT, TITANREP_ID, "ShowPercent","",2,true)
 		end
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Tooltip Options" then
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Tooltip Options" then
 			info.disabled = nil
 			info.func = nil
 		       	info.hasArrow = true
 		       	info.notCheckable = true
 		       	info.text = "Tooltip Scale ("..(TitanGetVar(TITANREP_ID, "ToolTipScale") * 100).."%)"
 		       	info.value = "Tooltip Scale"
-			Lib_UIDropDownMenu_AddButton(info, 2)
+			L_UIDropDownMenu_AddButton(info, 2)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_MINIMAL, TITANREP_ID, "Minimal")
 			TitanPanelRightClickMenu_AddSpacer2(2)
 		       	info.text = "Friendship Rank Settings"
 		       	info.value = "Friendship Rank Settings"
-			Lib_UIDropDownMenu_AddButton(info, 2)
+			L_UIDropDownMenu_AddButton(info, 2)
 		       	info.text = "Reputation Standing Settings"
 		       	info.value = "Reputation Standing Settings"
-			Lib_UIDropDownMenu_AddButton(info, 2)
+			L_UIDropDownMenu_AddButton(info, 2)
 			TitanPanelRightClickMenu_AddSpacer2(2)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_VALUE, TITANREP_ID, "ShowTipValue")
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_PERCENT, TITANREP_ID, "ShowTipPercent")
@@ -673,7 +678,7 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_STATS, TITANREP_ID, "ShowStats")
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_SUMMARY, TITANREP_ID, "ShowSummary")
 		end
-		if LIB_UIDROPDOWNMENU_MENU_VALUE == "Color Options" then
+		if L_UIDROPDOWNMENU_MENU_VALUE == "Color Options" then
 			info.disabled = nil
 			info.hasArrow = nil
 			info.notCheckable = nil
@@ -684,27 +689,27 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 1)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				Lib_CloseDropDownMenus()
+				L_CloseDropDownMenus()
 				end
-     			Lib_UIDropDownMenu_AddButton(info, 2)
+     			L_UIDropDownMenu_AddButton(info, 2)
 
 			info.text = TITANREP_ARMORY_COLORS
 			info.checked = function() if TitanGetVar(TITANREP_ID, "MyColor") == 2 then return true else return nil end end
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 2)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				Lib_CloseDropDownMenus()
+				L_CloseDropDownMenus()
 				end
-     			Lib_UIDropDownMenu_AddButton(info, 2)
+     			L_UIDropDownMenu_AddButton(info, 2)
 
 			info.text = TITANREP_NO_COLORS
 			info.checked = function() if TitanGetVar(TITANREP_ID, "MyColor") == 3 then return true else return nil end end
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 3)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				Lib_CloseDropDownMenus()
+				L_CloseDropDownMenus()
 				end
-     			Lib_UIDropDownMenu_AddButton(info, 2)
+     			L_UIDropDownMenu_AddButton(info, 2)
 		end
 		return
 	end
@@ -728,15 +733,15 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
        	info.notCheckable = true
        	info.text = "Button Options"
        	info.value = "Button Options"
-	Lib_UIDropDownMenu_AddButton(info, 1)
+	L_UIDropDownMenu_AddButton(info, 1)
 
        	info.text = "Tooltip Options"
        	info.value = "Tooltip Options"
-	Lib_UIDropDownMenu_AddButton(info, 1)
+	L_UIDropDownMenu_AddButton(info, 1)
 
        	info.text = "Color Options"
        	info.value = "Color Options"
-	Lib_UIDropDownMenu_AddButton(info, 1)
+	L_UIDropDownMenu_AddButton(info, 1)
 
 	TitanPanelRightClickMenu_AddSpacer2()
 
@@ -747,13 +752,13 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 		wipe(TITANREP_RTS)
 		TITANREP_TIME = GetTime()
 		print("TitanReputation Session Data Reset!")
-		Lib_CloseDropDownMenus()
+		L_CloseDropDownMenus()
 		end
-	Lib_UIDropDownMenu_AddButton(info,1)
+	L_UIDropDownMenu_AddButton(info,1)
 
 	info.text = "Close Menu"
 	info.value = "Close Menu"
-	Lib_UIDropDownMenu_AddButton(info, 1)
+	L_UIDropDownMenu_AddButton(info, 1)
 end
 
 function TitanReputationHeaderFactionToggle(name)
@@ -788,7 +793,7 @@ function TitanPanelReputation_BuildRightClickMenu(name, parentName, standingID, 
 				TitanReputationHeaderFactionToggle(name)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
 			end
-			Lib_UIDropDownMenu_AddButton(command)
+			L_UIDropDownMenu_AddButton(command)
 		end
 	end
 end
@@ -813,7 +818,7 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 	end
 	if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,1) end
 
-	if(parentName == LIB_UIDROPDOWNMENU_MENU_VALUE and (not isHeader or (isHeader and hasRep))) then
+	if(parentName == L_UIDROPDOWNMENU_MENU_VALUE and (not isHeader or (isHeader and hasRep))) then
 		command = {}
 		if(MYBARCOLORS) then
 			command.text = name.."  -  "..TitanUtils_GetColoredText(LABEL,MYBARCOLORS[(adjustedId)])
@@ -823,7 +828,7 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 		command.value = name
 		command.func = TitanPanelReputation_SetFaction
        		command.notCheckable = true
-		Lib_UIDropDownMenu_AddButton(command, LIB_UIDROPDOWNMENU_MENU_LEVEL)
+		L_UIDropDownMenu_AddButton(command, L_UIDROPDOWNMENU_MENU_LEVEL)
 	end
 end
 
