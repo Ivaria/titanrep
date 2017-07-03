@@ -1,3 +1,12 @@
+Release 3.9.1
+	- Added Support for Paragon Reputation
+		-	Assigned Legencary Orange as Reputation color
+		-	Updated Tooltip To handle Paragons
+		-	Updated Button Label to handle Paragons
+		-	Updated Right-Click Menu to handle Paragons.
+	- Updated Right-Click Menu to colorize faction names.
+	- First Pass of bug fixes for handling friendships.
+
 Release 3.9.0
 	- Converted calls to UIDropDownMenu_NOTAINT to !UIDropDownMenu
 	- Implemented temporary patch for RightClick bug in Titan Panel
