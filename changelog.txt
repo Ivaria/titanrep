@@ -1,3 +1,9 @@
+Release 3.9.2
+	- Fixed issue with Paragon standingID & LABEL. Paragon reputations should now be legendary orange. 
+	- Touched up ButtonText Labeling :: Trim values/percentange from capped factions and frends
+	- Began Conversion of text to strings for future localization
+	- Fixed issues with Session Summon displaying incorrectly.
+
 Release 3.9.1
 	- Added Support for Paragon Reputation
 		-	Assigned Legencary Orange as Reputation color
