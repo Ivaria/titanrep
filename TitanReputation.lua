@@ -946,23 +946,23 @@ end
 -- saves all reputation value, so we can monitor what is changed
 function TitanPanelReputation_GatherValues(name, parentName, standingID, topValue, earnedValue, percent, isHeader, isCollapsed, isInactive, hasRep, isChild, isFriendship, factionID, hasBonusRepGain)
 
-	if hasBonusRepGain then
-		if TitanRep_Data["BonusRep"][factionID] then TitanRep_Data["BonusRep"][factionID] = nil end
-	else
-		if TITANREP_bonusRepsTable[factionID] and standingID >= 7 then
-			local cname, _ = UnitName("player")
-			local crealm = GetRealmName()
-			if TitanRep_Data["BonusRep"][factionID] then
-				TitanRep_Data["BonusRep"][factionID][cname.."-"..crealm] = standingID
-			else
-				TitanRep_Data["BonusRep"][factionID] = { }
-				TitanRep_Data["BonusRep"][factionID][cname.."-"..crealm] = standingID
+	if TITANREP_TABLE_INIT then
+		if hasBonusRepGain then
+			if TitanRep_Data["BonusRep"][factionID] then TitanRep_Data["BonusRep"][factionID] = nil end
+		else
+			if TITANREP_bonusRepsTable[factionID] and standingID >= 7 then
+				local cname, _ = UnitName("player")
+				local crealm = GetRealmName()
+				if TitanRep_Data["BonusRep"][factionID] then
+					TitanRep_Data["BonusRep"][factionID][cname.."-"..crealm] = standingID
+				else
+					TitanRep_Data["BonusRep"][factionID] = { }
+					TitanRep_Data["BonusRep"][factionID][cname.."-"..crealm] = standingID
+				end
 			end
 		end
-	end
 
 
-	if TITANREP_TABLE_INIT then
 		if((not isHeader and name) or (isHeader and hasRep)) then
 			if not TITANREP_TABLE[factionID] and GetTime() - TITANREP_InitTime > 30 then		
 				local adjustedId = standingID
