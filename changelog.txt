@@ -1,3 +1,6 @@
+Release 3.9.3
+	- toc update for BFA 8.0
+
 Release 3.9.2
 	- Fixed issue with Paragon standingID & LABEL. Paragon reputations should now be legendary orange. 
 	- Touched up ButtonText Labeling :: Trim values/percentange from capped factions and frends
