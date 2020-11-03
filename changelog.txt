@@ -1,3 +1,5 @@
+Release 9.0.1.1
+	- Remove bonus reputation bits since they no longer exist
 Release 9.0.1.0
 	- toc update for Shadowlands pre-release
 Release 3.9.3
