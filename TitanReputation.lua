@@ -8,6 +8,9 @@ TITAMREP_InitTime = 0
 TITANREP_RTS = {}
 gFactionID = 1168
 
+-- grab a ref to LibUIDropDownMenu
+local LibDD = LibStub:GetLibrary("LibUIDropDownMenu-4.0")
+
 --check Glamour version
 --
 
@@ -172,7 +175,7 @@ function TitanPanelReputationButton_OnLoad(self)
 
     --Temporary Patch for Titan Panel RightClick bug.
     TitanPanelBarButton_OnClick(Titan_Bar__Display_Bar,"RightButton")   
-    L_CloseDropDownMenus() 
+    LibDD:CloseDropDownMenus() 
 end
 
 -- event handling
@@ -361,11 +364,22 @@ function TitanPanelReputation_BuildToolTipText(name, parentName, standingID, top
 	local adjustedId = standingID
 
 	if isFriendship then
-		friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(isFriendship)
-        if not nextFriendThreshold then 
-            adjustedId = 8
-            TOTAL_BESTFRIENDS = TOTAL_BESTFRIENDS + 1
-        end
+		local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+
+		friendID = reputationInfo["friendshipFactionID"]
+		friendRep = reputationInfo["standing"]
+		friendMaxRep = reputationInfo["maxRep"] 
+		friendName = reputationInfo["name"] 
+		friendText = reputationInfo["text"] 
+		friendTexture = reputationInfo["texture"] 
+		friendTextLevel = reputationInfo["reaction"] 
+		friendThreshold = reputationInfo["reactionThreshold"] 
+		nextFriendThreshold = reputationInfo["nextThreshold"] 
+
+	        if not nextFriendThreshold then 
+		    adjustedId = 8
+	            TOTAL_BESTFRIENDS = TOTAL_BESTFRIENDS + 1
+		end
 	elseif standingID == 8  then TOTAL_EXALTED = TOTAL_EXALTED + 1 	end
 
 	if (tContains(TitanGetVar(TITANREP_ID, "FactionHeaders"), parentName)) then
@@ -478,7 +492,7 @@ function TitanPanelRightClickMenu_AddTitle2(title, level)
 		info.notClickable = 1
 		info.isTitle = 1
        		info.notCheckable = true
-		L_UIDropDownMenu_AddButton(info, level)
+		LibDD:UIDropDownMenu_AddButton(info, level)
 	end
 end
 
@@ -495,12 +509,12 @@ function TitanPanelRightClickMenu_AddToggleVar2(text, id, var, toggleTable, leve
 	else
 		info.func = function()
 			TitanPanelRightClickMenu_ToggleVar({id, var, toggleTable})
-			L_CloseDropDownMenus()
+			LibDD:CloseDropDownMenus()
 			end
 	end
 	info.checked = TitanGetVar(id, var)
 	info.keepShownOnClick = 1
-	L_UIDropDownMenu_AddButton(info, level)
+	LibDD:UIDropDownMenu_AddButton(info, level)
 end
 
 function TitanPanelRightClickMenu_AddToggleIcon2(id)
@@ -511,7 +525,7 @@ function TitanPanelRightClickMenu_AddSpacer2(level)
 	local info = {}
 	info.disabled = 1
        	info.notCheckable = true
-	L_UIDropDownMenu_AddButton(info, level)
+	LibDD:UIDropDownMenu_AddButton(info, level)
 end
 
 
@@ -562,10 +576,10 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				info.func = function()
 					TitanSetVar(TITANREP_ID, "ToolTipScale", TitanGetVar(TITANREP_ID, "ToolTipScale") + .1)
 					TitanPanelButton_UpdateButton(TITANREP_ID)
-					L_CloseDropDownMenus()
+					LibDD:CloseDropDownMenus()
 					end
 			end
-	     		L_UIDropDownMenu_AddButton(info, 3)
+	     		LibDD:UIDropDownMenu_AddButton(info, 3)
 			info.text = TITANREP_SCALE_DECREASE
 			if TitanGetVar(TITANREP_ID, "ToolTipScale") <= .4 then
 				info.disabled = true
@@ -575,10 +589,10 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				info.func = function()
 					TitanSetVar(TITANREP_ID, "ToolTipScale", TitanGetVar(TITANREP_ID, "ToolTipScale") - .1)
 					TitanPanelButton_UpdateButton(TITANREP_ID)
-					L_CloseDropDownMenus()
+					LibDD:CloseDropDownMenus()
 					end
 			end
-  			L_UIDropDownMenu_AddButton(info, 3)
+  			LibDD:UIDropDownMenu_AddButton(info, 3)
 		end
 		return
 	end
@@ -598,10 +612,10 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 				else
 					TitanSetVar(TITANREP_ID, "DisplayOnRightSide", 1)
 				end
-				L_CloseDropDownMenus()
+				LibDD:CloseDropDownMenus()
 				TitanPanel_InitPanelButtons()
 				end
-  			L_UIDropDownMenu_AddButton(info, 2)
+  			LibDD:UIDropDownMenu_AddButton(info, 2)
 			TitanPanelRightClickMenu_AddToggleIcon2(TITANREP_ID, L_UIDROPDOWNMENU_MENU_LEVEL)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_ShowFriendsOnBar, TITANREP_ID, "ShowFriendsOnBar","",2,true)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_FACTION_NAME_LABEL, TITANREP_ID, "ShowFactionName","",2,true)
@@ -617,15 +631,15 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 		       	info.notCheckable = true
 		       	info.text = "Tooltip Scale ("..(TitanGetVar(TITANREP_ID, "ToolTipScale") * 100).."%)"
 		       	info.value = "Tooltip Scale"
-			L_UIDropDownMenu_AddButton(info, 2)
+			LibDD:UIDropDownMenu_AddButton(info, 2)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_MINIMAL, TITANREP_ID, "Minimal")
 			TitanPanelRightClickMenu_AddSpacer2(2)
 		       	info.text = "Friendship Rank Settings"
 		       	info.value = "Friendship Rank Settings"
-			L_UIDropDownMenu_AddButton(info, 2)
+			LibDD:UIDropDownMenu_AddButton(info, 2)
 		       	info.text = "Reputation Standing Settings"
 		       	info.value = "Reputation Standing Settings"
-			L_UIDropDownMenu_AddButton(info, 2)
+			LibDD:UIDropDownMenu_AddButton(info, 2)
 			TitanPanelRightClickMenu_AddSpacer2(2)
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_VALUE, TITANREP_ID, "ShowTipValue")
 			TitanPanelRightClickMenu_AddToggleVar2(TITANREP_SHOW_PERCENT, TITANREP_ID, "ShowTipPercent")
@@ -646,27 +660,27 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 1)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				L_CloseDropDownMenus()
+				LibDD:CloseDropDownMenus()
 				end
-     			L_UIDropDownMenu_AddButton(info, 2)
+     			LibDD:UIDropDownMenu_AddButton(info, 2)
 
 			info.text = TITANREP_ARMORY_COLORS
 			info.checked = function() if TitanGetVar(TITANREP_ID, "MyColor") == 2 then return true else return nil end end
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 2)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				L_CloseDropDownMenus()
+				LibDD:CloseDropDownMenus()
 				end
-     			L_UIDropDownMenu_AddButton(info, 2)
+     			LibDD:UIDropDownMenu_AddButton(info, 2)
 
 			info.text = TITANREP_NO_COLORS
 			info.checked = function() if TitanGetVar(TITANREP_ID, "MyColor") == 3 then return true else return nil end end
 			info.func = function()
 				TitanSetVar(TITANREP_ID, "MyColor", 3)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
-				L_CloseDropDownMenus()
+				LibDD:CloseDropDownMenus()
 				end
-     			L_UIDropDownMenu_AddButton(info, 2)
+     			LibDD:UIDropDownMenu_AddButton(info, 2)
 		end
 		return
 	end
@@ -689,15 +703,15 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
        	info.notCheckable = true
        	info.text = "Button Options"
        	info.value = "Button Options"
-	L_UIDropDownMenu_AddButton(info, 1)
+	LibDD:UIDropDownMenu_AddButton(info, 1)
 
        	info.text = "Tooltip Options"
        	info.value = "Tooltip Options"
-	L_UIDropDownMenu_AddButton(info, 1)
+	LibDD:UIDropDownMenu_AddButton(info, 1)
 
        	info.text = "Color Options"
        	info.value = "Color Options"
-	L_UIDropDownMenu_AddButton(info, 1)
+	LibDD:UIDropDownMenu_AddButton(info, 1)
 
 	TitanPanelRightClickMenu_AddSpacer2()
 
@@ -708,13 +722,13 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 		wipe(TITANREP_RTS)
 		TITANREP_TIME = GetTime()
 		print("TitanReputation Session Data Reset!")
-		L_CloseDropDownMenus()
+		LibDD:CloseDropDownMenus()
 		end
-	L_UIDropDownMenu_AddButton(info,1)
+	LibDD:UIDropDownMenu_AddButton(info,1)
 
 	info.text = "Close Menu"
 	info.value = "Close Menu"
-	L_UIDropDownMenu_AddButton(info, 1)
+	LibDD:UIDropDownMenu_AddButton(info, 1)
 end
 
 function TitanReputationHeaderFactionToggle(name)
@@ -749,7 +763,7 @@ function TitanPanelReputation_BuildRightClickMenu(name, parentName, standingID, 
 				TitanReputationHeaderFactionToggle(name)
 				TitanPanelButton_UpdateButton(TITANREP_ID)
 			end
-			L_UIDropDownMenu_AddButton(command)
+			LibDD:UIDropDownMenu_AddButton(command)
 		end
 	end
 end
@@ -759,8 +773,19 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 	local friendID , friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold 
 	local adjustedId = standingID
 	if isFriendship then
-		friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(isFriendship)
-        if not nextFriendThreshold then adjustedId = 8 end
+		local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+
+		friendID = reputationInfo["friendshipFactionID"]
+		friendRep = reputationInfo["standing"]
+		friendMaxRep = reputationInfo["maxRep"] 
+		friendName = reputationInfo["name"] 
+		friendText = reputationInfo["text"] 
+		friendTexture = reputationInfo["texture"] 
+		friendTextLevel = reputationInfo["reaction"] 
+		friendThreshold = reputationInfo["reactionThreshold"] 
+		nextFriendThreshold = reputationInfo["nextThreshold"] 
+
+	        if not nextFriendThreshold then adjustedId = 8 end
 	end
 
 	local LABEL = getglobal("FACTION_STANDING_LABEL"..standingID)
@@ -777,7 +802,7 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 		command.value = name
 		command.func = TitanPanelReputation_SetFaction
        		command.notCheckable = true
-		L_UIDropDownMenu_AddButton(command, L_UIDROPDOWNMENU_MENU_LEVEL)
+		LibDD:UIDropDownMenu_AddButton(command, L_UIDROPDOWNMENU_MENU_LEVEL)
 	end
 end
 
@@ -806,7 +831,18 @@ function TitanPanelReputation_BuildButtonText(name, parentName, standingID, topV
    		if not TitanGetVar(TITANREP_ID, "ShowFriendsOnBar") then
 			return
 		end
-		friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(isFriendship)
+		
+		local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+
+		friendID = reputationInfo["friendshipFactionID"]
+		friendRep = reputationInfo["standing"]
+		friendMaxRep = reputationInfo["maxRep"] 
+		friendName = reputationInfo["name"] 
+		friendText = reputationInfo["text"] 
+		friendTexture = reputationInfo["texture"] 
+		friendTextLevel = reputationInfo["reaction"] 
+		friendThreshold = reputationInfo["reactionThreshold"] 
+		nextFriendThreshold = reputationInfo["nextThreshold"] 
 	end
 
     if topValue == 0 then adjustedId = 8 end
@@ -887,8 +923,22 @@ function TitanPanelReputation_GatherValues(name, parentName, standingID, topValu
 
 				if isFriendship then
 					if not TitanGetVar(TITANREP_ID, "ShowFriendsOnBar") then return end
-					local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(isFriendship)
-                    if not nextFriendThreshold then adjustedId = 8 end
+					local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold
+
+					local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+
+					friendID = reputationInfo["friendshipFactionID"]
+					friendRep = reputationInfo["standing"]
+					friendMaxRep = reputationInfo["maxRep"] 
+					friendName = reputationInfo["name"] 
+					friendText = reputationInfo["text"] 
+					friendTexture = reputationInfo["texture"] 
+					friendTextLevel = reputationInfo["reaction"] 
+					friendThreshold = reputationInfo["reactionThreshold"] 
+					nextFriendThreshold = reputationInfo["nextThreshold"] 
+
+					if not nextFriendThreshold then adjustedId = 8 end
+					
 					LABEL = friendTextLevel
 					factionType = "Friendship"
 				end
@@ -944,8 +994,19 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 	local factionType = "Faction Standing"
 
 	if isFriendship then
-		friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(isFriendship)
-        if not nextFriendThreshold then adjustedId = 8 end
+		local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+
+		friendID = reputationInfo["friendshipFactionID"]
+		friendRep = reputationInfo["standing"]
+		friendMaxRep = reputationInfo["maxRep"] 
+		friendName = reputationInfo["name"] 
+		friendText = reputationInfo["text"] 
+		friendTexture = reputationInfo["texture"] 
+		friendTextLevel = reputationInfo["reaction"] 
+		friendThreshold = reputationInfo["reactionThreshold"] 
+		nextFriendThreshold = reputationInfo["nextThreshold"] 
+
+	        if not nextFriendThreshold then adjustedId = 8 end
 		if not TitanGetVar(TITANREP_ID, "ShowFriendsOnBar") then return	end
 		factionType = "Friendship Ranking"
 	end
@@ -1067,25 +1128,41 @@ function TitanPanelReputation_GatherFactions(method)
 		local parentName = ""
 		local friendID
 		while(not done)do
-			local name, description, standingID, bottomValue, topValue, earnedValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep,
-				isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(index)
-			local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold = GetFriendshipReputation(factionID)
-			local value
+			local name, description, standingID, bottomValue, topValue, earnedValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(index)
+		
+			if factionID then
+				local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold
 
-			-- Normalize values
-			topValue = topValue - bottomValue
-			earnedValue = earnedValue - bottomValue
-			bottomValue = 0
+				local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
 
-			percent = format("%.2f",(earnedValue/topValue)*100)
-			if(percent:len()<5) then percent = "0"..percent; end
+				friendID = reputationInfo["friendshipFactionID"]
+				friendRep = reputationInfo["standing"]
+				friendMaxRep = reputationInfo["maxRep"]
+				friendName = reputationInfo["name"]
+				friendText = reputationInfo["text"]
+				friendTexture = reputationInfo["texture"]
+				friendTextLevel = reputationInfo["reaction"]
+				friendThreshold = reputationInfo["reactionThreshold"]
+				nextFriendThreshold = reputationInfo["nextThreshold"]
 
-			if(isHeader) then parentName = name; end
-			
-            method(name, parentName, standingID, topValue, earnedValue, percent, isHeader, isCollapsed, IsFactionInactive(index), hasRep, isChild, friendID, factionID)
-			
-            index = index+1
-			
-            if(index>count) then done = true; end
+				local value
+
+				-- Normalize values
+				topValue = topValue - bottomValue
+				earnedValue = earnedValue - bottomValue
+				bottomValue = 0
+
+				percent = format("%.2f",(earnedValue/topValue)*100)
+				if(percent:len()<5) then percent = "0"..percent; end
+
+				if(isHeader) then parentName = name; end
+
+				method(name, parentName, standingID, topValue, earnedValue, percent, isHeader, isCollapsed, IsFactionInactive(index), hasRep, isChild, (friendID > 0) and true or false, factionID)
+			end
+
+
+			index = index+1
+										
+			if(index>count) then done = true; end
 		end
 end
