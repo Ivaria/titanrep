@@ -40,7 +40,8 @@ local TITANREP_COLORS_DEFAULT = {
 		[6] = {r = 0, g = 0.5, b = 0.5},
 		[7] = {r = 0, g = 0.5, b = 1.0},
 		[8] = {r = 0.2, g = 0.7, b = 0.7},
-		[9] = {r = 1, g = 0.5, b = 0.1}
+		[9] = {r = 1, g = 0.5, b = 0.1},
+		[10] = {r = 0.000, g = 0.749, b = 0.953},
 }
 
 local TITANREP_COLORS_ARMORY = {
@@ -52,7 +53,8 @@ local TITANREP_COLORS_ARMORY = {
 		[6] = {r = 0.34, g = 0.47, b = 0.00},
 		[7] = {r = 0.14, g = 0.48, b = 0.00},
 		[8] = {r = 0.01, g = 0.49, b = 0.42},
-		[9] = {r = 1, g = 0.5, b = 0.1}
+		[9] = {r = 1, g = 0.5, b = 0.1},
+		[10] = {r = 0.000, g = 0.749, b = 0.953},
 }
 
 local MYBARCOLORS = TITANREP_COLORS_DEFAULT
@@ -439,6 +441,13 @@ function TitanPanelReputation_BuildToolTipText(name, parentName, standingID, top
 				LABEL = TITANREP_PARAGON
 			end
 
+			if factionID and C_Reputation.IsMajorFaction(factionID) then
+				local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+				LABEL = tostring(majorFactionData.renownLevel)
+				adjustedId = 10
+			end
+
 			if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,1) end
 
 			if(LAST_HEADER[2] == 0) then
@@ -794,7 +803,7 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 	        if not nextFriendThreshold then adjustedId = 8 end
 	end
 
-	if hasBonusRepGain and not (isFriendship and not nextFriendThreshold) and not (adjustedId >= 8 and topValue == 0) then
+	if hasBonusRepGain then
 		adjustedId = 9
 	end
 
@@ -803,6 +812,13 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 
 	if hasBonusRepGain and not (isFriendship and not nextFriendThreshold) and not (adjustedId >= 8 and topValue == 0) then
 		LABEL = TITANREP_PARAGON
+	end
+
+	if factionID and C_Reputation.IsMajorFaction(factionID) then
+		local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+		LABEL = tostring(majorFactionData.renownLevel)
+		adjustedId = 10
 	end
 
 	if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,1) end
@@ -873,6 +889,13 @@ function TitanPanelReputation_BuildButtonText(name, parentName, standingID, topV
 
 	if hasBonusRepGain and not (isFriendship and not nextFriendThreshold) and not (adjustedId >= 8 and topValue == 0) then
 		LABEL = TITANREP_PARAGON
+	end
+
+	if factionID and C_Reputation.IsMajorFaction(factionID) then
+		local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+		LABEL = tostring(majorFactionData.renownLevel)
+		adjustedId = 10
 	end
 
 	if(TitanGetVar(TITANREP_ID, "ShortStanding")) then LABEL = strsub(LABEL,1,1) end
@@ -977,6 +1000,13 @@ function TitanPanelReputation_GatherValues(name, parentName, standingID, topValu
 					LABEL = TITANREP_PARAGON
 				end
 
+				if factionID and C_Reputation.IsMajorFaction(factionID) then
+					local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+					LABEL = tostring(majorFactionData.renownLevel)
+					adjustedId = 10
+				end
+
 				if(MYBARCOLORS) then
 					msg = TitanUtils_GetColoredText(name.." - "..LABEL,MYBARCOLORS[(adjustedId)])
 					dsc = dsc..TitanUtils_GetColoredText(LABEL,MYBARCOLORS[(adjustedId)])
@@ -1055,6 +1085,13 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 
 	if hasBonusRepGain and not (isFriendship and not nextFriendThreshold) and not (adjustedId >= 8 and topValue == 0) then
 		LABEL = TITANREP_PARAGON
+	end
+
+	if factionID and C_Reputation.IsMajorFaction(factionID) then
+		local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+		LABEL = tostring(majorFactionData.renownLevel)
+		adjustedId = 10
 	end
 
 	if(not (factionID == gFactionID) and TITANREP_TABLE[factionID]) then
@@ -1195,7 +1232,7 @@ function TitanPanelReputation_GatherFactions(method)
 				bottomValue = 0
 
 				-- BonusRep Compatibility :: Issue #27 :: Code Provided by: SLOKnightfall
-				if (factionID and C_Reputation.IsFactionParagon(factionID)) then
+				if (C_Reputation.IsFactionParagon(factionID)) then
 					earnedValue, topValue, rewardQuestID, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
 
 					local level = math.floor(earnedValue / topValue) - (hasRewardPending and 1 or 0)
@@ -1203,6 +1240,17 @@ function TitanPanelReputation_GatherFactions(method)
 
 					earnedValue = realValue
 					hasBonusRepGain  = true
+				elseif (C_Reputation.IsMajorFaction(factionID)) then
+					local majorFactionData = C_MajorFactions.GetMajorFactionData(factionID)
+
+					topValue = majorFactionData.renownLevelThreshold
+					earnedValue = C_MajorFactions.HasMaximumRenown(factionID) and majorFactionData.renownLevelThreshold or majorFactionData.renownReputationEarned or 0
+				elseif (reputationInfo and friendID > 0) then
+					if (nextFriendThreshold) then
+						bottomValue, topValue, earnedValue = 0, nextFriendThreshold - friendThreshold, friendRep - friendThreshold
+					else
+						bottomValue, topValue, earnedValue = 0, friendRep - friendThreshold, friendRep - friendThreshold
+					end
 				end
 
 				percent = format("%.2f",(earnedValue/topValue)*100)
