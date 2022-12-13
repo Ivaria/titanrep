@@ -448,7 +448,7 @@ function TitanPanelReputation_BuildToolTipText(name, parentName, standingID, top
 				adjustedId = 10
 			end
 
-			if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,1) end
+			if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,adjustedId == 10 and 2 or 1) end
 
 			if(LAST_HEADER[2] == 0) then
 				--if(LAST_HEADER[1] == TITANREP_GUILDLOCAL) then
@@ -491,7 +491,7 @@ function TitanPanelReputation_BuildToolTipText(name, parentName, standingID, top
 						TITANREP_TOOLTIP_TEXT = TITANREP_TOOLTIP_TEXT..percent.."% "
 					end
 					if(TitanGetVar(TITANREP_ID, "ShowTipStanding")) then
-						TITANREP_TOOLTIP_TEXT = TITANREP_TOOLTIP_TEXT..strsub(LABEL,1,1)
+						TITANREP_TOOLTIP_TEXT = TITANREP_TOOLTIP_TEXT..strsub(LABEL,1,adjustedId == 10 and 2 or 1)
 					end
 				end
 			end
@@ -821,7 +821,7 @@ function TitanPanelReputation_BuildFactionSubMenu(name, parentName, standingID, 
 		adjustedId = 10
 	end
 
-	if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,1) end
+	if TitanGetVar(TITANREP_ID, "ShortTipStanding") then LABEL = strsub(LABEL,1,adjustedId == 10 and 2 or 1) end
 
 	if(parentName == TitanPanelRightClickMenu_GetDropdMenuValue() and (not isHeader or (isHeader and hasRep))) then
 		command = {}
@@ -898,7 +898,7 @@ function TitanPanelReputation_BuildButtonText(name, parentName, standingID, topV
 		adjustedId = 10
 	end
 
-	if(TitanGetVar(TITANREP_ID, "ShortStanding")) then LABEL = strsub(LABEL,1,1) end
+	if(TitanGetVar(TITANREP_ID, "ShortStanding")) then LABEL = strsub(LABEL,1,adjustedId == 10 and 2 or 1) end
 
 	TitanReputationSetColor()
 	if((not isHeader or (isHeader and hasRep)) and (TitanGetVar(TITANREP_ID, "TITANREP_WATCHED_FACTION")==name)) then
