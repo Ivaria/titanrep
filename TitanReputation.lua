@@ -1236,7 +1236,7 @@ function TitanPanelReputation_GatherFactions(method)
 					earnedValue, topValue, rewardQuestID, hasRewardPending = C_Reputation.GetFactionParagonInfo(factionID)
 
 					local level = math.floor(earnedValue / topValue) - (hasRewardPending and 1 or 0)
-					local realValue = tonumber(string.sub(earnedValue, string.len(level) + 1))
+					local realValue = level > 0 and tonumber(string.sub(earnedValue, string.len(level) + 1)) or earnedValue
 
 					earnedValue = realValue
 					hasBonusRepGain  = true
