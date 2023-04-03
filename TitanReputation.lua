@@ -1020,7 +1020,7 @@ function TitanPanelReputation_GatherValues(name, parentName, standingID, topValu
 					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
-						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 53, 30)
+						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
@@ -1113,7 +1113,7 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
-						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 53, 30)
+						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
@@ -1148,7 +1148,7 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
-						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 53, 30)
+						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
