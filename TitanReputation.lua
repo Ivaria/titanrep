@@ -172,8 +172,6 @@ function TitanPanelReputationButton_OnLoad(self)
     self:RegisterEvent("UPDATE_FACTION")
     self:RegisterEvent("ADDON_LOADED")
 
-    --Temporary Patch for Titan Panel RightClick bug.
-    TitanPanelBarButton_OnClick(Titan_Bar__Display_Bar,"RightButton")   
     TitanPanelRightClickMenu_Close()
 end
 
