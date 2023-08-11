@@ -1251,7 +1251,11 @@ function TitanPanelReputation_GatherFactions(method)
 					end
 				end
 
-				percent = format("%.2f",(earnedValue/topValue)*100)
+				finalValue = 0
+				if topValue > 0 then
+					finalValue = ( earnedValue / topValue )
+				end
+				percent = format("%.2f",finalValue*100)
 				if(percent:len()<5) then percent = "0"..percent; end
 
 				if(isHeader) then parentName = name; end
