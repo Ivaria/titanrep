@@ -8,6 +8,21 @@ TITAMREP_InitTime = 0
 TITANREP_RTS = {}
 gFactionID = 1168
 
+--
+local GetNumFactions = GetNumFactions or C_Reputation.GetNumFactions;
+local IsFactionInactive = IsFactionInactive or function(...) return not C_Reputation.IsFacitonActive end;
+local GetFactionInfo = GetFactionInfo or function(...)
+	local factionInfo = C_Reputation.GetFactionDataByIndex(...)
+
+	if factionInfo then
+		return factionInfo.name, factionInfo.description, factionInfo.reaction, factionInfo.currentReactionThreshold,
+			factionInfo.nextReactionThreshold, factionInfo.currentStanding, factionInfo.atWarWith,
+			factionInfo.canToggleAtWar, factionInfo.isHeader, factionInfo.isCollapsed, factionInfo.isHeaderWithRep,
+		        factionInfo.isWatched, factionInfo.isChild, factionInfo.factionID, factionInfo.hasBonusRepGain,
+			factionInfo.canSetInactive, factionInfo.isAccountWide;
+	end
+end;
+
 --check Glamour version
 --
 
