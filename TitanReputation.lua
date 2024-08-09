@@ -10,7 +10,7 @@ gFactionID = 1168
 
 --
 local GetNumFactions = GetNumFactions or C_Reputation.GetNumFactions;
-local IsFactionInactive = IsFactionInactive or function(...) return not C_Reputation.IsFacitonActive end;
+local IsFactionInactive = IsFactionInactive or function(...) return not C_Reputation.IsFactionActive end;
 local GetFactionInfo = GetFactionInfo or function(...)
 	local factionInfo = C_Reputation.GetFactionDataByIndex(...)
 
