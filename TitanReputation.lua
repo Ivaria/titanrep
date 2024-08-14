@@ -1,7 +1,7 @@
 -- globals
 TITANREP_ID =  "Reputation"
-TITANREP_VERSION = GetAddOnMetadata("TitanReputation", "Version") or "UnKnown Version"
-TITANREP_TITLE = GetAddOnMetadata("TitanReputation", "Title") or "UnKnown Title"
+TITANREP_VERSION = C_AddOns.GetAddOnMetadata("TitanReputation", "Version") or "UnKnown Version"
+TITANREP_TITLE = C_AddOns.GetAddOnMetadata("TitanReputation", "Title") or "UnKnown Title"
 TITANREP_BUTTON_ICON = "Interface\\AddOns\\TitanReputation\\TitanReputation"
 TITANREP_EventTime = GetTime()
 TITAMREP_InitTime = 0
@@ -26,7 +26,7 @@ end;
 --check Glamour version
 --
 
-if(IsAddOnLoaded("Glamour")) then
+if(C_AddOns.IsAddOnLoaded("Glamour")) then
 	local min_version = 1.2
 	local major, minor, _ = strsplit(".", Glamour_VERSION)
 	local glam_ver = tonumber(major.."."..minor)
@@ -716,10 +716,10 @@ function TitanPanelRightClickMenu_PrepareReputationMenu()
 	TitanPanelRightClickMenu_AddTitle2(TitanPlugins[TITANREP_ID].menuText.." v"..TITANREP_VERSION)
 	TitanPanelRightClickMenu_AddToggleVar(TITANREP_AUTO_CHANGE, TITANREP_ID, "AutoChange")
 	TitanPanelRightClickMenu_AddToggleVar(TITANREP_SHOW_ANNOUNCE, TITANREP_ID, "ShowAnnounce")
-	if(IsAddOnLoaded("MikScrollingBattleText")) then
+	if(C_AddOns.IsAddOnLoaded("MikScrollingBattleText")) then
 		TitanPanelRightClickMenu_AddToggleVar(TITANREP_SHOW_ANNOUNCE_MIK, TITANREP_ID, "ShowAnnounceMik")
 	end
-	if(IsAddOnLoaded("Glamour")) then
+	if(C_AddOns.IsAddOnLoaded("Glamour")) then
 		TitanPanelRightClickMenu_AddToggleVar(TITANREP_SHOW_ANNOUNCE_FRAME, TITANREP_ID, "ShowAnnounceFrame")
 	end
 	TitanPanelRightClickMenu_AddSpacer2()
@@ -1030,14 +1030,14 @@ function TitanPanelReputation_GatherValues(name, parentName, standingID, topValu
 				dsc = dsc.." standing with "..name.."."
 				msg = tag..msg..tag
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounce")) then
-					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
+					if(C_AddOns.IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
 						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
-					if(IsAddOnLoaded("Glamour")) then
+					if(C_AddOns.IsAddOnLoaded("Glamour")) then
 						local MyData = { }
 						MyData.Text = name.." - "..LABEL
  						MyData.Icon = "Interface\\ICONS\\Achievement_Reputation_"..TITANREP_ICONS[(adjustedId)]
@@ -1123,14 +1123,14 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 				dsc = dsc.." standing with "..name.."."
 				msg = tag..msg..tag
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounce")) then
-					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
+					if(C_AddOns.IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
 						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
-					if(IsAddOnLoaded("Glamour")) then
+					if(C_AddOns.IsAddOnLoaded("Glamour")) then
 							local MyData = { }
 							MyData.Text = name.." - "..LABEL
 	 						MyData.Icon = "Interface\\ICONS\\Achievement_Reputation_"..TITANREP_ICONS[(adjustedId)]
@@ -1158,14 +1158,14 @@ function TitanPanelReputation_GetChangedName(name, parentName, standingID, topVa
 				dsc = dsc.." standing with "..name.."."
 				msg = tag..msg..tag
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounce")) then
-					if(IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
+					if(C_AddOns.IsAddOnLoaded("MikScrollingBattleText") and TitanGetVar(TITANREP_ID, "ShowAnnounceMik")) then
 						MikSBT.DisplayMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t","Notification",1)
 					else
 						UIErrorsFrame:AddMessage("|T"..TITANREP_BUTTON_ICON..":32|t"..msg.."|T"..TITANREP_BUTTON_ICON..":32|t", 2.0, 2.0, 0.0, 1.0, 53, 30)
 					end
 				end
 				if(TitanGetVar(TITANREP_ID, "ShowAnnounceFrame")) then
-					if(IsAddOnLoaded("Glamour")) then
+					if(C_AddOns.IsAddOnLoaded("Glamour")) then
 							local MyData = { }
 							MyData.Text = name.." - "..LABEL
 	 						MyData.Icon = "Interface\\ICONS\\Achievement_Reputation_"..TITANREP_ICONS[(adjustedId)]
@@ -1223,19 +1223,21 @@ function TitanPanelReputation_GatherFactions(method)
 			local name, description, standingID, bottomValue, topValue, earnedValue, atWarWith, canToggleAtWar, isHeader, isCollapsed, hasRep, isWatched, isChild, factionID, hasBonusRepGain, canBeLFGBonus = GetFactionInfo(index)
 		
 			if factionID then
-				local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold
+				local friendID, friendRep, friendMaxRep, friendName, friendText, friendTexture, friendTextLevel, friendThreshold, nextFriendThreshold, reputationInfo
 
-				local reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
+				if C_GossipInfo.GetFriendshipReputation(factionID) and C_GossipInfo.GetFriendshipReputation(factionID).friendshipFactionID > 0 then
+					reputationInfo = C_GossipInfo.GetFriendshipReputation(factionID)
 
-				friendID = reputationInfo["friendshipFactionID"]
-				friendRep = reputationInfo["standing"]
-				friendMaxRep = reputationInfo["maxRep"]
-				friendName = reputationInfo["name"]
-				friendText = reputationInfo["text"]
-				friendTexture = reputationInfo["texture"]
-				friendTextLevel = reputationInfo["reaction"]
-				friendThreshold = reputationInfo["reactionThreshold"]
-				nextFriendThreshold = reputationInfo["nextThreshold"]
+					friendID = reputationInfo["friendshipFactionID"]
+					friendRep = reputationInfo["standing"]
+					friendMaxRep = reputationInfo["maxRep"]
+					friendName = reputationInfo["name"]
+					friendText = reputationInfo["text"]
+					friendTexture = reputationInfo["texture"]
+					friendTextLevel = reputationInfo["reaction"]
+					friendThreshold = reputationInfo["reactionThreshold"]
+					nextFriendThreshold = reputationInfo["nextThreshold"]
+				end
 
 				local value
 
@@ -1275,7 +1277,7 @@ function TitanPanelReputation_GatherFactions(method)
 
 				if(isHeader) then parentName = name; end
 
-				method(name, parentName, standingID, topValue, earnedValue, percent, isHeader, isCollapsed, IsFactionInactive(index), hasRep, isChild, (friendID > 0) and true or false, factionID, hasBonusRepGain)
+				method(name, parentName, standingID, topValue, earnedValue, percent, isHeader, isCollapsed, IsFactionInactive(index), hasRep, isChild, ((friendID or 0) > 0) and true or false, factionID, hasBonusRepGain)
 			end
 
 
